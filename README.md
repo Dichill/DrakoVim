@@ -1,87 +1,115 @@
 # DrakoVim
 
-A [LazyVim](https://www.lazyvim.org/)-based Neovim setup styled after VS Code —
-Dark+ theme, explorer docked on the right, editor tabs on top, integrated
-terminal on the bottom. Launch it with `dvim`.
+This is my personal Neovim config. I grew up on VS Code, so I built this to
+feel like that, just with my own preferences mixed in. It also matches how
+my zsh and Warp are set up. Editor, prompt, and terminal all share the same
+look.
 
-## Usage
+I use [LazyVim](https://www.lazyvim.org/) under the hood. I launch it with
+`dvim`.
+
+## How I use it
 
 ```bash
 dvim            # open DrakoVim in the current directory
-dvim file.py    # open a file
+dvim file.py    # open a specific file
 ```
 
-The `dvim` alias (in `~/.zshrc`) runs `NVIM_APPNAME=dvim nvim`, so DrakoVim is
-fully isolated from any other Neovim setup on your machine. This repo is
-symlinked to `~/.config/dvim`; its plugin data lives in `~/.local/share/dvim`.
+I have a `dvim` alias in my `~/.zshrc` that runs `NVIM_APPNAME=dvim nvim`,
+so this stays out of the way of any other Neovim I have. This repo is
+symlinked to `~/.config/dvim`. Plugin data lives in `~/.local/share/dvim`.
 
-## Layout (matches VS Code)
+## What it looks like
 
-| VS Code                 | DrakoVim                                           |
-| ----------------------- | -------------------------------------------------- |
-| Theme                   | VS Code Dark+ via `Mofiqul/vscode.nvim`            |
-| Explorer (right side)   | neo-tree, docked right, dotfiles visible           |
-| Editor tabs             | bufferline.nvim                                    |
-| Integrated terminal     | snacks terminal (bottom panel)                     |
-| Status bar              | lualine with the VS Code palette                   |
-| Command palette         | snacks picker                                      |
-| Format on save          | conform.nvim (enabled by default)                  |
+The dashboard when I open `dvim` with no file:
 
-## Key bindings (VS Code muscle memory)
+![DrakoVim dashboard](assets/dashboard.png)
 
-| Key            | Action                                     |
-| -------------- | ------------------------------------------ |
-| `Ctrl+P`       | Quick-open files                           |
-| `Ctrl+B`       | Toggle the file explorer                   |
-| `` Ctrl+` ``   | Toggle the integrated terminal (also `Ctrl+/`) |
-| `Ctrl+S`       | Save                                       |
-| `Shift+H/L`    | Previous / next editor tab                 |
-| `Space`        | Leader — pause to see every command (which-key) |
-| `Space Space`  | Find files                                 |
-| `Space /`      | Search across the project (like `Ctrl+Shift+F`) |
-| `Space g g`    | Lazygit (if installed)                     |
-| `Space e`      | Focus/toggle explorer                      |
+Editing a file. Explorer on the right, red statusline, same feel as VS Code:
 
-All standard LazyVim keymaps apply: <https://www.lazyvim.org/keymaps>
+![DrakoVim editor](assets/editor.png)
 
-## Languages preconfigured
+My Warp terminal. Same red path block, conda/venv on the right:
 
-Python (basedpyright + ruff), TypeScript/JavaScript (vtsls), JSON, Markdown,
-Lua — servers and formatters are preinstalled via Mason. Add more with
-`:LazyExtras`.
+![Warp terminal](assets/warp.png)
 
-## Structure
+- VS Code Dark+ colors, with a transparent background so Warp's blur shows
+  through
+- My red accent (`#D16969`) on the statusline, dashboard, and folder icons
+- Explorer on the right, the way I keep it in VS Code. Red folder icons,
+  white-grey text, and the same git letters (M/A/U)
+- Tabs on top, a VS Code-style statusline, and a transparent terminal on
+  Ctrl+`
+- Rotating mottos on the dashboard under the DRAKOVIM banner
+- A smear cursor, because I like it
+
+## Keys I actually use
+
+| Key | What it does |
+| --- | --- |
+| `Ctrl+P` | Quick-open files |
+| `Ctrl+B` | Toggle the explorer |
+| `` Ctrl+` `` (or `Ctrl+/`) | Toggle the terminal |
+| `Ctrl+S` | Save |
+| `Space /` | Search the whole project |
+| `Shift+H / L` | Switch tabs |
+
+If I forget something, I press `Space` and wait. which-key shows the rest.
+I keep a longer list in [CHEATSHEET.md](CHEATSHEET.md).
+
+## Languages and AI
+
+I set this up for what I actually write: Python (basedpyright + ruff),
+TypeScript and JavaScript (vtsls + prettier), JSON, Markdown, Lua, and
+shell. Files format on save. Servers install themselves through `:Mason`.
+
+For AI I wanted something close to Cursor. Copilot handles the inline
+suggestions (Tab to accept). avante.nvim is the sidebar. `Space a a` to
+ask, `Space a e` to edit a selection. I had to run `:Copilot auth` once.
+
+## My terminal (Warp and Starship)
+
+I use the same colors in my terminal. Those configs live in `extras/`.
+
+- `extras/warp/DrakoVim.yaml` is my Warp theme. Copy it to `~/.warp/themes/`
+  and set `theme = "DrakoVim"` in `~/.warp/settings.toml`, or just pick it
+  in Warp's theme picker.
+- `extras/starship/starship.toml` is my Starship prompt. Red path block on
+  the left. venv, conda, git, and command duration on the right. Copy it to
+  `~/.config/starship.toml` and add `eval "$(starship init zsh)"` to
+  `~/.zshrc`.
+
+## Setting it up on a new machine
+
+```bash
+git clone https://github.com/Dichill/DrakoVim.git ~/Documents/Projects/DrakoVim
+ln -s ~/Documents/Projects/DrakoVim ~/.config/dvim
+echo 'alias dvim="NVIM_APPNAME=dvim nvim"' >> ~/.zshrc
+dvim   # plugins install themselves on first launch
+```
+
+You'll need Neovim 0.12+, git, ripgrep, fd, and a Nerd Font. I use
+CaskaydiaCove Nerd Font (Cascadia Code with icons and ligatures).
+
+## What's in here
 
 ```
 init.lua                    entry point
 lua/config/lazy.lua         lazy.nvim bootstrap + plugin spec
-lua/config/options.lua      editor options (absolute numbers, 4-space indent…)
-lua/config/keymaps.lua      VS Code-style key bindings
-lua/config/autocmds.lua     terminal polish, future autocmds
-lua/plugins/colorscheme.lua VS Code Dark+ theme
-lua/plugins/ui.lua          explorer/right, tabs, statusline, dashboard
+lua/config/options.lua      editor options
+lua/config/keymaps.lua      my VS Code-style keybinds
+lua/config/autocmds.lua     terminal polish
+lua/plugins/colorscheme.lua VS Code theme + my red accents
+lua/plugins/ui.lua          explorer, tabs, statusline, dashboard mottos
+lua/plugins/avante.lua      AI sidebar (Copilot-powered)
 lazyvim.json                enabled LazyVim extras
+extras/                     Warp theme + Starship prompt
+assets/                     screenshots of the editor, dashboard, and Warp
 ```
 
-## Terminal theming (Warp + Starship)
+## If something breaks
 
-The DrakoVim look extends to the terminal. Configs live in `extras/`:
-
-- `extras/warp/DrakoVim.yaml` — Warp theme: VS Code Dark+ ANSI palette with
-  the DrakoVim red accent. Install: copy to `~/.warp/themes/` and select
-  "DrakoVim" in Warp's theme picker (or set `theme = "DrakoVim"` in
-  `~/.warp/settings.toml`).
-- `extras/starship/starship.toml` — blocky [Starship](https://starship.rs)
-  prompt in the DrakoVim palette: red path block, git/conda/venv/duration
-  blocks on the right. Install: copy to `~/.config/starship.toml` and add
-  `eval "$(starship init zsh)"` to your `~/.zshrc`.
-
-## Maintenance
-
-- `:Lazy sync` — update plugins
-- `:LazyExtras` — enable more language/tooling extras
-- `:Mason` — manage language servers and formatters
-- `:LazyHealth` — check that everything is healthy
-
-The previous `~/.config/dvim` contents were backed up to
-`~/.config/dvim.bak-20260827`.
+- `:Lazy sync` updates plugins
+- `:LazyExtras` adds more language extras
+- `:Mason` manages LSPs and formatters
+- `:LazyHealth` tells me if something is off
