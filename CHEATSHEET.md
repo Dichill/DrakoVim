@@ -100,6 +100,18 @@ a targeted "select next occurrence" workflow.
 | `Enter` | Open file · `P` preview without leaving the tree |
 | `?` | All explorer keys |
 
+## Quit and sessions
+
+Sessions save automatically when you quit (as long as at least one file was open).
+`dvim` in that same project folder restores them next time.
+
+| Key | Action |
+| --- | --- |
+| `Space q q` or `:qa` | Quit and save the session |
+| `Space q s` | Restore this project's session (also `s` on the dashboard) |
+| `Space q d` | Quit *without* saving this session (next `dvim` shows the dashboard) |
+| `dvim file.py` | Open just that file. Does not restore the old session |
+
 ## Escape hatches
 
 - `Esc Esc` in the terminal → normal mode

@@ -164,9 +164,23 @@ return {
         -- NormalFloat by default, which stays solid for picker readability).
         terminal = {
           wo = {
+            -- Drop the extra title row ("1: user@host:path") so the
+            -- prompt sits flush under the editor, like VS Code.
+            winbar = "",
             winhighlight = "Normal:Normal,NormalNC:Normal,WinBar:SnacksWinBar,WinBarNC:SnacksWinBarNC",
           },
         },
+      },
+    },
+  },
+
+  -- basedpyright (and other LSPs) send a progress event on every keystroke.
+  -- noice turns those into the stacked "basedpyright" toasts in the corner.
+  {
+    "folke/noice.nvim",
+    opts = {
+      lsp = {
+        progress = { enabled = false },
       },
     },
   },
